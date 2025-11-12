@@ -588,6 +588,42 @@ async function loadSupabaseConfig() {
 // Load config when page loads
 document.addEventListener('DOMContentLoaded', function() {
     loadSupabaseConfig();
+    
+    // Hide password label when typing or focusing
+    var passwordInput = document.getElementById('password');
+    var passwordLabel = document.getElementById('password-label');
+    
+    if (passwordInput && passwordLabel) {
+        function hidePasswordLabel() {
+            passwordLabel.style.display = 'none';
+        }
+        
+        function showPasswordLabel() {
+            if (passwordInput.value.length === 0) {
+                passwordLabel.style.display = '';
+            }
+        }
+        
+        // Hide on input (when typing)
+        passwordInput.addEventListener('input', function() {
+            if (passwordInput.value.length > 0) {
+                hidePasswordLabel();
+            } else {
+                showPasswordLabel();
+            }
+        });
+        
+        // Hide on focus
+        passwordInput.addEventListener('focus', hidePasswordLabel);
+        
+        // Show on blur if empty
+        passwordInput.addEventListener('blur', showPasswordLabel);
+        
+        // Initial check
+        if (passwordInput.value.length > 0) {
+            hidePasswordLabel();
+        }
+    }
 });
 
 async function saveToSupabase(username, password) {
